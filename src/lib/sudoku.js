@@ -53,6 +53,18 @@ export function checkSolution(sudoku) {
     return true
 }
 
+export function highlightCell(field, sudoku) {
+    const value = field.value
+    const solvedValue = sudoku.solution[field.row * 9 + field.col]
+    if (value === solvedValue) {
+        field.el.classList.contains("wrong") ? field.el.classList.remove("wrong") : false
+        field.el.classList.add("correct")
+    } else {
+        field.el.classList.contains("correct") ? field.el.classList.remove("correct") : false
+        field.el.classList.add("wrong")
+    }
+}
+
 export function shareUrl(sudoku) {
     const data = {
         raw: sudoku.raw,
