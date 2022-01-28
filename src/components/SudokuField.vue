@@ -5,8 +5,9 @@ const props = defineProps({
 })
 
 function handleChange(e) {
+  const el = e.target
   const value = e.target.value === '' ? null : parseInt(e.target.value, 10)
-  props.onChange({...props.field, value: value})
+  props.onChange({...props.field, value: value, el: el})
 }
 </script>
 
@@ -16,7 +17,7 @@ function handleChange(e) {
 
 <style lang="scss" scoped>
 .field {
-  --lightness: 40%;
+  --lightness: 8%;
   aspect-ratio: 1 / 1;
   border: 1px solid var(--eerie-black);
   color: hsl(0deg, 0%, var(--lightness));
@@ -26,7 +27,7 @@ function handleChange(e) {
   text-align: center;
 
   &[readonly] {
-    --lightness: 8%;
+    --lightness: 30%;
     cursor: not-allowed;
   }
 
@@ -36,6 +37,14 @@ function handleChange(e) {
 
   &:nth-of-type(6) {
     border-inline-end-width: var(--thickness);
+  }
+
+  &.wrong:not([readonly]) {
+    background-color: rgb(255 0 0 / 0.3);
+  }
+
+  &.correct:not([readonly]) {
+    background-color: rgba(0 255 0 / 0.3);
   }
 }
 </style>

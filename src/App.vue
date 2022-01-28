@@ -1,6 +1,6 @@
 <script setup>
 import {reactive} from 'vue'
-import {generateSudoku, checkSolution, shareUrl} from './lib/sudoku'
+import {generateSudoku, checkSolution, highlightCell, shareUrl} from './lib/sudoku'
 import SudokuBoard from './components/SudokuBoard.vue'
 import ReloadPrompt from './components/ReloadPrompt.vue'
 
@@ -11,6 +11,7 @@ const store = {
 
   handleChange(e) {
     store.state.sudoku.rows[e.row].cols[e.col].value = e.value
+    highlightCell(e, store.state.sudoku)
     if (!store.state.sudoku.solvedTime) {
       const solved = checkSolution(store.state.sudoku)
       if (solved) {
@@ -33,6 +34,11 @@ const store = {
 
   resetSudoku() {
     store.state.sudoku = generateSudoku()
+    const allFields = document.querySelectorAll('.field')
+    allFields.forEach((field) => {
+      field.classList.remove("wrong")
+      field.classList.remove("correct")
+    })
   }
 }
 </script>
