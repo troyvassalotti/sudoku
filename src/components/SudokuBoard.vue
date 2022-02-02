@@ -7,7 +7,8 @@ defineProps({
   sudoku: Object,
   onChange: Function,
   solver: Function,
-  reset: Function
+  reset: Function,
+  progress: Function
 })
 </script>
 
@@ -24,6 +25,7 @@ defineProps({
     </div>
     <div class="buttons">
       <button class="solve" @click="solver">Solve it Magically!</button>
+      <button class="progress" @click="progress">Check Your Progress</button>
       <button class="reset" @click="reset">New Puzzle</button>
     </div>
   </main>
@@ -43,7 +45,7 @@ defineProps({
 
 .board {
   --thickness: 4px;
-  border: var(--thickness) solid var(--eerie-black);
+  border: var(--thickness) solid var(--ink);
 }
 
 .row {
@@ -51,11 +53,11 @@ defineProps({
   grid-template-columns: repeat(9, minmax(10px, 1fr));
 
   &:nth-of-type(3) {
-    border-block-end: var(--thickness) solid var(--eerie-black);
+    border-block-end: var(--thickness) solid var(--ink);
   }
 
   &:nth-of-type(6) {
-    border-block-end: var(--thickness) solid var(--eerie-black);
+    border-block-end: var(--thickness) solid var(--ink);
   }
 }
 
@@ -67,10 +69,11 @@ defineProps({
 
   button {
     --lightness: 8%;
-    background-color: hsl(0deg, 0%, var(--lightness));
+    --hs: 0deg, 0%;
+    background-color: hsl(var(--hs), var(--lightness));
     border: none;
     border-radius: .5em;
-    color: var(--white);
+    color: var(--canvas);
     cursor: pointer;
     font: {
       family: var(--titles);
@@ -83,6 +86,16 @@ defineProps({
 
     &:hover {
       --lightness: 28%;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .buttons button {
+    --lightness: 95%;
+
+    &:hover {
+      --lightness: 60%;
     }
   }
 }

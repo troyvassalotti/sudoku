@@ -11,6 +11,9 @@ const store = {
 
   handleChange(e) {
     store.state.sudoku.rows[e.row].cols[e.col].value = e.value
+    /**
+     * @todo remove highlight cell, but keep the code for reference as it might be needed later
+     */
     highlightCell(e, store.state.sudoku)
     if (!store.state.sudoku.solvedTime) {
       const solved = checkSolution(store.state.sudoku)
@@ -32,6 +35,12 @@ const store = {
     store.state.sudoku.cheated = true
   },
 
+  checkProgress() {
+    /**
+     * @todo Complete This
+     */
+  },
+
   resetSudoku() {
     store.state.sudoku = generateSudoku()
     const allFields = document.querySelectorAll('.field')
@@ -48,7 +57,7 @@ const store = {
     <h1>Sudoku</h1>
   </header>
   <SudokuBoard :sudoku="store.state.sudoku" :onChange="store.handleChange" :solver="store.solveSudoku"
-               :reset="store.resetSudoku"/>
+               :reset="store.resetSudoku" :progress="store.checkProgress"/>
   <ReloadPrompt/>
 </template>
 
@@ -61,7 +70,7 @@ html {
   --white: hsla(0, 0%, 100%, 1);
   --amber-sae-ece: hsla(28, 100%, 53%, 1);
   --copper-rose: hsla(358, 20%, 51%, 1);
-  --blue: hsla(220, 62%, 51%, 1);
+  --blue: hsla(220, 57%, 47%, 1);
   --step--3: clamp(0.6513rem, 0.5949rem + 0.2817vw, 0.7956rem);
   --step--2: clamp(0.7813rem, 0.7134rem + 0.339vw, 0.955rem);
   --step--1: clamp(0.9375rem, 0.8563rem + 0.4061vw, 1.1456rem);
@@ -73,6 +82,9 @@ html {
   --step-5: clamp(2.7994rem, 2.5567rem + 1.2134vw, 3.4213rem);
   --step-6: clamp(3.3594rem, 3.0682rem + 1.4561vw, 4.1056rem);
   --titles: 'Shippori Antique', sans-serif;
+
+  --canvas: var(--white);
+  --ink: var(--eerie-black);
   box-sizing: border-box;
 }
 
@@ -90,8 +102,8 @@ html:focus-within {
 }
 
 body {
-  background-color: var(--white);
-  color: var(--eerie-black);
+  background-color: var(--canvas);
+  color: var(--ink);
   font: {
     family: system-ui, sans-serif;
     size: var(--step-0);
@@ -144,6 +156,13 @@ h2 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --canvas: var(--eerie-black);
+    --ink: var(--white);
   }
 }
 </style>

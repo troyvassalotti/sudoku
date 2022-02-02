@@ -19,7 +19,7 @@ function handleChange(e) {
 .field {
   --lightness: 8%;
   aspect-ratio: 1 / 1;
-  border: 1px solid var(--eerie-black);
+  border: 1px solid var(--ink);
   color: hsl(0deg, 0%, var(--lightness));
   font: {
     size: var(--step-1);
@@ -45,6 +45,17 @@ function handleChange(e) {
 
   &.correct:not([readonly]) {
     background-color: rgba(0 255 0 / 0.3);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .field {
+    --lightness: 95%;
+    background-color: var(--canvas);
+
+    &[readonly] {
+      --lightness: 70%;
+    }
   }
 }
 </style>

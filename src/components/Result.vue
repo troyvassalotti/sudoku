@@ -78,4 +78,10 @@ h2 {
   cursor: pointer;
   text-decoration: underline;
 }
+
+@media (prefers-color-scheme: dark) {
+  #share {
+    color: var(--amber-sae-ece);
+  }
+}
 </style>
