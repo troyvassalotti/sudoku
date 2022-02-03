@@ -27,3 +27,9 @@ onBeforeUnmount(() => {
 <template>
   <h2>Time: {{ state.elapsed }}</h2>
 </template>
+
+<style scoped>
+h2 {
+  text-align: center;
+}
+</style>

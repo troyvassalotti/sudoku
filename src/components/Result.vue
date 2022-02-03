@@ -54,11 +54,17 @@ onMounted(() => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen></iframe>
     </div>
-    <p>Challenge a friend: <button id="share" @click="shareLink">Share Puzzle Link</button></p>
+    <p>Challenge a friend:
+      <button id="share" @click="shareLink">Share Puzzle Link</button>
+    </p>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.container {
+  text-align: center;
+}
+
 h2 {
   margin-block-end: .5em;
 }

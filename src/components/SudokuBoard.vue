@@ -2,36 +2,51 @@
 import SudokuField from './SudokuField.vue'
 import Timer from './Timer.vue'
 import Result from './Result.vue'
+import {reactive} from "vue"
 
-defineProps({
+const props = defineProps({
   sudoku: Object,
   onChange: Function,
   solver: Function,
   reset: Function,
-  progressOpts: Object,
   progress: Boolean,
+  progressOpts: Object,
   restore: Function,
   previous: Object,
 })
+
+const toggle = reactive({checked: false})
+
+function handleToggle(e) {
+  console.log(e.target.value)
+  if (toggle.checked) {
+    props.progressOpts.enable()
+  } else {
+    props.progressOpts.disable()
+  }
+}
 </script>
 
 <template>
   <main class="main">
-    <Timer v-if="!sudoku.solvedTime" :start="sudoku.startTime"/>
-    <Result v-if="sudoku.solvedTime" :sudoku="sudoku"/>
+    <Timer v-if="!props.sudoku.solvedTime" :start="props.sudoku.startTime"/>
+    <Result v-if="props.sudoku.solvedTime" :sudoku="props.sudoku"/>
     <div class="wrapper">
-      <div class="board" :class="{solved: sudoku.solvedTime}">
-        <div class="row" v-for="row in sudoku.rows" :key="row.index">
-          <SudokuField v-for="field in row.cols" :key="field.col" :field="field" :onChange="onChange"/>
+      <div class="board" :class="{solved: props.sudoku.solvedTime}">
+        <div class="row" v-for="row in props.sudoku.rows" :key="row.index">
+          <SudokuField v-for="field in row.cols" :key="field.col" :field="field" :onChange="props.onChange"/>
         </div>
       </div>
     </div>
     <div class="buttons">
-      <button class="progress" @click="progressOpts.enable" v-if="!progress">Show Your Progress</button>
-      <button class="progress" @click="progressOpts.disable" v-else>Hide Your Progress</button>
-      <button class="solve" @click="solver">Solve it Magically!</button>
-      <button class="reset" @click="reset">New Puzzle</button>
-      <button class="restore" @click="restore" v-if="previous">Restore Your Last Board</button>
+      <label class="switch" for="progress-toggle">
+        <input type="checkbox" name="Toggle Cell Highlighting" id="progress-toggle" v-model="toggle.checked"
+               @change="handleToggle">
+        <div class="slider"></div>
+      </label>
+      <button class="solve" @click="props.solver">Solve it Magically!</button>
+      <button class="reset" @click="props.reset">New Puzzle</button>
+      <button class="restore" @click="props.restore" v-if="props.previous">Restore Your Last Board</button>
     </div>
   </main>
 </template>
@@ -39,12 +54,11 @@ defineProps({
 <style lang="scss" scoped>
 .main {
   padding-block: 1rem;
-  text-align: center;
 }
 
 .wrapper {
   margin-inline: auto;
-  max-inline-size: 50rem;
+  max-inline-size: 45rem;
   padding: 1rem;
 }
 
@@ -93,6 +107,49 @@ defineProps({
 
     &:hover {
       --lightness: 28%;
+    }
+  }
+}
+
+.switch {
+  --h: calc(var(--w) / 2);
+  --w: 3.5rem;
+  block-size: var(--h);
+  display: inline-block;
+  inline-size: var(--w);
+
+  input {
+    display: none;
+
+    &:checked {
+      + .slider {
+      --bg: var(--blue);
+
+        &::before {
+          transform: translateX(var(--h));
+        }
+      }
+    }
+  }
+
+  .slider {
+    --bg: var(--amber-sae-ece);
+    background-color: var(--bg);
+    block-size: inherit;
+    border-radius: 34px;
+    cursor: pointer;
+    inline-size: inherit;
+    position: absolute;
+    transition: background-color .5s linear;
+
+    &::before {
+      background-color: var(--ink);
+      block-size: var(--h);
+      border-radius: 50%;
+      content: "";
+      inline-size: var(--h);
+      position: absolute;
+      transition: 0.4s, background-color 1s linear;
     }
   }
 }
