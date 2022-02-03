@@ -8,6 +8,7 @@ const store = {
   state: reactive({
     sudoku: generateSudoku(),
     showProgress: false,
+    previousSudoku: null,
   }),
 
   /**
@@ -39,6 +40,8 @@ const store = {
     store.state.sudoku.solvedTime = new Date()
     store.state.sudoku.shareUrl = shareUrl(store.state.sudoku)
     store.state.sudoku.cheated = true
+
+
   },
 
   /**
@@ -57,11 +60,45 @@ const store = {
    * Start over with a fresh board
    */
   resetSudoku() {
-    store.state.sudoku = generateSudoku()
-    const allFields = document.querySelectorAll('.field')
-    allFields.forEach((field) => {
-      field.classList.remove("wrong")
+    if (!store.state.sudoku.solvedTime) {
+      store.state.previousSudoku = store.state.sudoku
+    }
+    const allCorrectFields = document.querySelectorAll('.field.correct')
+    allCorrectFields.forEach(field => {
+      if (!store.state.sudoku.solvedTime) field.classList.add("previousCorrect")
       field.classList.remove("correct")
+    })
+    const allWrongFields = document.querySelectorAll('.field.wrong')
+    allWrongFields.forEach(field => {
+      if (!store.state.sudoku.solvedTime) field.classList.add("previousWrong")
+      field.classList.remove("wrong")
+    })
+    store.state.sudoku = generateSudoku()
+  },
+
+  /**
+   * Restore your last board if you created a new one by mistake
+   */
+  restoreSudoku() {
+    store.state.sudoku = store.state.previousSudoku
+    store.state.previousSudoku = null
+    const allCorrectFields = document.querySelectorAll('.field.correct')
+    allCorrectFields.forEach(field => {
+      field.classList.remove("correct")
+    })
+    const allWrongFields = document.querySelectorAll('.field.wrong')
+    allWrongFields.forEach(field => {
+      field.classList.remove("wrong")
+    })
+    const previousCorrectFields = document.querySelectorAll('.previousCorrect')
+    previousCorrectFields.forEach(field => {
+      field.classList.add("correct")
+      field.classList.remove("previousCorrect")
+    })
+    const previousWrongFields = document.querySelectorAll('.previousWrong')
+    previousWrongFields.forEach(field => {
+      field.classList.add("wrong")
+      field.classList.remove("previousWrong")
     })
   }
 }
@@ -81,7 +118,8 @@ const store = {
     <h1>Sudoku</h1>
   </header>
   <SudokuBoard :sudoku="store.state.sudoku" :onChange="store.handleChange" :solver="store.solveSudoku"
-               :reset="store.resetSudoku" :progressOpts="store.progressOptions" :progress="store.state.showProgress"/>
+               :reset="store.resetSudoku" :progressOpts="store.progressOptions" :progress="store.state.showProgress"
+               :restore="store.restoreSudoku" :previous="store.state.previousSudoku"/>
   <ReloadPrompt/>
 </template>
 
