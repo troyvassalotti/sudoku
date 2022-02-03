@@ -11,6 +11,10 @@ const state = reactive({
   opponent: 0
 })
 
+/**
+ * Share your Sudoku link either as a URL or with the Share API
+ * @param e - Event
+ */
 function shareLink(e) {
   let link = props.sudoku.shareUrl
   if (navigator.share) {
@@ -77,5 +81,11 @@ h2 {
   color: var(--blue);
   cursor: pointer;
   text-decoration: underline;
+}
+
+@media (prefers-color-scheme: dark) {
+  #share {
+    color: var(--amber-sae-ece);
+  }
 }
 </style>
