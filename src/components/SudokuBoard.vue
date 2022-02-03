@@ -10,6 +10,8 @@ defineProps({
   reset: Function,
   progressOpts: Object,
   progress: Boolean,
+  restore: Function,
+  previous: Object,
 })
 </script>
 
@@ -29,6 +31,7 @@ defineProps({
       <button class="progress" @click="progressOpts.disable" v-else>Hide Your Progress</button>
       <button class="solve" @click="solver">Solve it Magically!</button>
       <button class="reset" @click="reset">New Puzzle</button>
+      <button class="restore" @click="restore" v-if="previous">Restore Your Last Board</button>
     </div>
   </main>
 </template>
@@ -79,7 +82,6 @@ defineProps({
     border-radius: .5em;
     color: var(--canvas);
     cursor: pointer;
-    flex: 1 1 max-content;
     font: {
       family: var(--titles);
       size: var(--step--1);
