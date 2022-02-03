@@ -4,6 +4,10 @@ const props = defineProps({
   onChange: Function
 })
 
+/**
+ * Pass changed field up to the Sudoku board to evaluate the field's value
+ * @param e - Event
+ */
 function handleChange(e) {
   const el = e.target
   const value = e.target.value === '' ? null : parseInt(e.target.value, 10)
@@ -37,14 +41,6 @@ function handleChange(e) {
 
   &:nth-of-type(6) {
     border-inline-end-width: var(--thickness);
-  }
-
-  &.wrong:not([readonly]) {
-    background-color: rgb(255 0 0 / 0.3);
-  }
-
-  &.correct:not([readonly]) {
-    background-color: rgba(0 255 0 / 0.3);
   }
 }
 

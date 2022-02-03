@@ -6,14 +6,16 @@ import ReloadPrompt from './components/ReloadPrompt.vue'
 
 const store = {
   state: reactive({
-    sudoku: generateSudoku()
+    sudoku: generateSudoku(),
+    showProgress: false,
   }),
 
+  /**
+   * Receives events from the individual fields to either highlight cells or check solutions
+   * @param e - Event
+   */
   handleChange(e) {
     store.state.sudoku.rows[e.row].cols[e.col].value = e.value
-    /**
-     * @todo remove highlight cell, but keep the code for reference as it might be needed later
-     */
     highlightCell(e, store.state.sudoku)
     if (!store.state.sudoku.solvedTime) {
       const solved = checkSolution(store.state.sudoku)
@@ -24,6 +26,10 @@ const store = {
     }
   },
 
+  /**
+   * Instantly solve the sudoku
+   * @function
+   */
   solveSudoku() {
     store.state.sudoku.rows.forEach(row => {
       row.cols.forEach(col => {
@@ -35,12 +41,21 @@ const store = {
     store.state.sudoku.cheated = true
   },
 
-  checkProgress() {
-    /**
-     * @todo Complete This
-     */
+  /**
+   * Determines whether to show the highlighted cells
+   */
+  progressOptions: {
+    enable: () => {
+      store.state.showProgress = true
+    },
+    disable: () => {
+      store.state.showProgress = false
+    },
   },
 
+  /**
+   * Start over with a fresh board
+   */
   resetSudoku() {
     store.state.sudoku = generateSudoku()
     const allFields = document.querySelectorAll('.field')
@@ -53,11 +68,20 @@ const store = {
 </script>
 
 <template>
+  <component :is="'style'" v-if="store.state.showProgress">
+    .field.wrong:not([readonly]) {
+    background-color: rgb(255 0 0 / 0.3);
+    }
+
+    .field.correct:not([readonly]) {
+    background-color: rgba(0 255 0 / 0.3);
+    }
+  </component>
   <header class="header">
     <h1>Sudoku</h1>
   </header>
   <SudokuBoard :sudoku="store.state.sudoku" :onChange="store.handleChange" :solver="store.solveSudoku"
-               :reset="store.resetSudoku" :progress="store.checkProgress"/>
+               :reset="store.resetSudoku" :progressOpts="store.progressOptions" :progress="store.state.showProgress"/>
   <ReloadPrompt/>
 </template>
 

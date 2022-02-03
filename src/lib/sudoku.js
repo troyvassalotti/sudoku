@@ -41,6 +41,11 @@ export function generateSudoku() {
     return result
 }
 
+/**
+ * Evaluate the current solution against the solution
+ * @param sudoku
+ * @returns {boolean}
+ */
 export function checkSolution(sudoku) {
     const candidate = sudoku.rows.map((row) => row.cols.map((col) => col.value)).flat()
 
@@ -53,6 +58,11 @@ export function checkSolution(sudoku) {
     return true
 }
 
+/**
+ * Take the last edited field and add the proper class to it
+ * @param field
+ * @param sudoku
+ */
 export function highlightCell(field, sudoku) {
     const value = field.value
     const solvedValue = sudoku.solution[field.row * 9 + field.col]
@@ -65,6 +75,11 @@ export function highlightCell(field, sudoku) {
     }
 }
 
+/**
+ * Create a URL for your sudoku to share with someone else
+ * @param sudoku
+ * @returns {string}
+ */
 export function shareUrl(sudoku) {
     const data = {
         raw: sudoku.raw,
