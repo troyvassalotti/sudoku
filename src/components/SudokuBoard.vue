@@ -37,16 +37,22 @@ function handleToggle(e) {
           <SudokuField v-for="field in row.cols" :key="field.col" :field="field" :onChange="props.onChange"/>
         </div>
       </div>
-    </div>
-    <div class="buttons">
-      <label class="switch" for="progress-toggle">
-        <input type="checkbox" name="Toggle Cell Highlighting" id="progress-toggle" v-model="toggle.checked"
-               @change="handleToggle">
-        <div class="slider"></div>
-      </label>
-      <button class="solve" @click="props.solver">Solve it Magically!</button>
-      <button class="reset" @click="props.reset">New Puzzle</button>
-      <button class="restore" @click="props.restore" v-if="props.previous">Restore Your Last Board</button>
+      <div class="actions">
+        <fieldset class="options">
+          <legend>Game Options</legend>
+          <label class="switch" for="progress-toggle">
+            <span class="switch__label">Color Clues 🔍</span>
+            <input type="checkbox" name="Toggle Cell Highlighting" id="progress-toggle" v-model="toggle.checked"
+                   @change="handleToggle">
+            <span class="slider"></span>
+          </label>
+        </fieldset>
+        <div class="buttons">
+          <button class="solve" @click="props.solver">Solve it Magically!</button>
+          <button class="reset" @click="props.reset">New Puzzle</button>
+          <button class="restore" @click="props.restore" v-if="props.previous">Restore Your Last Board</button>
+        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -80,13 +86,83 @@ function handleToggle(e) {
   }
 }
 
+.options {
+  margin-block: 2rem;
+  margin-inline: auto;
+  max-inline-size: 30rem;
+  padding: {
+    block: 1rem;
+    inline: .75rem;
+  }
+
+  legend {
+    background-color: var(--pewter-blue);
+    color: var(--eerie-black);
+    margin-inline-start: 1rem;
+    padding: {
+      block: .5rem;
+      inline: .75rem;
+    }
+  }
+}
+
+.switch {
+  --h: calc(var(--w) / 2);
+  --w: 3.5rem;
+  align-items: center;
+  block-size: var(--h);
+  display: flex;
+  font-size: var(--step--1);
+  gap: var(--w);
+  justify-content: space-around;
+
+  span {
+    display: block;
+  }
+
+  input {
+    display: none;
+
+    &:checked {
+      + .slider {
+        --bg: var(--blue);
+
+        &::before {
+          transform: translateX(var(--h));
+        }
+      }
+    }
+  }
+
+  .slider {
+    --bg: var(--amber-sae-ece);
+    --timing: .3s;
+    background-color: var(--bg);
+    block-size: inherit;
+    border-radius: 34px;
+    cursor: pointer;
+    inline-size: var(--w);
+    transition: background-color var(--timing) linear;
+
+    &::before {
+      background-color: var(--ink);
+      block-size: var(--h);
+      border-radius: 50%;
+      content: "";
+      inline-size: var(--h);
+      position: absolute;
+      transition: var(--timing) ease-in-out;
+    }
+  }
+}
+
 .buttons {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
   justify-content: center;
-  padding: 1rem;
+  padding: .75rem;
 
   button {
     --lightness: 8%;
@@ -98,58 +174,15 @@ function handleToggle(e) {
     cursor: pointer;
     font: {
       family: var(--titles);
-      size: var(--step--1);
+      size: var(--step--2);
     }
     padding: {
-      block: 1em;
+      block: .75em;
       inline: 1em;
     }
 
     &:hover {
       --lightness: 28%;
-    }
-  }
-}
-
-.switch {
-  --h: calc(var(--w) / 2);
-  --w: 3.5rem;
-  block-size: var(--h);
-  display: inline-block;
-  inline-size: var(--w);
-
-  input {
-    display: none;
-
-    &:checked {
-      + .slider {
-      --bg: var(--blue);
-
-        &::before {
-          transform: translateX(var(--h));
-        }
-      }
-    }
-  }
-
-  .slider {
-    --bg: var(--amber-sae-ece);
-    background-color: var(--bg);
-    block-size: inherit;
-    border-radius: 34px;
-    cursor: pointer;
-    inline-size: inherit;
-    position: absolute;
-    transition: background-color .5s linear;
-
-    &::before {
-      background-color: var(--ink);
-      block-size: var(--h);
-      border-radius: 50%;
-      content: "";
-      inline-size: var(--h);
-      position: absolute;
-      transition: 0.4s, background-color 1s linear;
     }
   }
 }
