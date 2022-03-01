@@ -40,8 +40,6 @@ const store = {
     store.state.sudoku.solvedTime = new Date()
     store.state.sudoku.shareUrl = shareUrl(store.state.sudoku)
     store.state.sudoku.cheated = true
-
-
   },
 
   /**
