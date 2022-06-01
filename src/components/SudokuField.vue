@@ -1,22 +1,29 @@
 <script setup>
 const props = defineProps({
   field: Object,
-  onChange: Function
-})
+  onChange: Function,
+});
 
 /**
  * Pass changed field up to the Sudoku board to evaluate the field's value
  * @param e - Event
  */
 function handleChange(e) {
-  const el = e.target
-  const value = e.target.value === '' ? null : parseInt(e.target.value, 10)
-  props.onChange({...props.field, value: value, el: el})
+  const el = e.target;
+  const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
+  props.onChange({ ...props.field, value: value, el: el });
 }
 </script>
 
 <template>
-  <input class="field" inputmode="numeric" maxlength="1" pattern="[0-9]*" :value="props.field.value || ''" :readonly="props.field.readonly" @change="handleChange">
+  <input
+    class="field"
+    inputmode="numeric"
+    maxlength="1"
+    pattern="[0-9]*"
+    :value="props.field.value || ''"
+    :readonly="props.field.readonly"
+    @change="handleChange" />
 </template>
 
 <style lang="scss" scoped>

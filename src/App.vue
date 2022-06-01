@@ -1,8 +1,8 @@
 <script setup>
-import {reactive} from 'vue'
-import {generateSudoku, checkSolution, highlightCell, shareUrl} from './lib/sudoku'
-import SudokuBoard from './components/SudokuBoard.vue'
-import ReloadPrompt from './components/ReloadPrompt.vue'
+import { reactive } from "vue";
+import { generateSudoku, checkSolution, highlightCell, shareUrl } from "./lib/sudoku";
+import SudokuBoard from "./components/SudokuBoard.vue";
+import ReloadPrompt from "./components/ReloadPrompt.vue";
 
 const store = {
   state: reactive({
@@ -16,13 +16,13 @@ const store = {
    * @param e - Event
    */
   handleChange(e) {
-    store.state.sudoku.rows[e.row].cols[e.col].value = e.value
-    highlightCell(e, store.state.sudoku)
+    store.state.sudoku.rows[e.row].cols[e.col].value = e.value;
+    highlightCell(e, store.state.sudoku);
     if (!store.state.sudoku.solvedTime) {
-      const solved = checkSolution(store.state.sudoku)
+      const solved = checkSolution(store.state.sudoku);
       if (solved) {
-        store.state.sudoku.solvedTime = new Date()
-        store.state.sudoku.shareUrl = shareUrl(store.state.sudoku)
+        store.state.sudoku.solvedTime = new Date();
+        store.state.sudoku.shareUrl = shareUrl(store.state.sudoku);
       }
     }
   },
@@ -32,14 +32,14 @@ const store = {
    * @function
    */
   solveSudoku() {
-    store.state.sudoku.rows.forEach(row => {
-      row.cols.forEach(col => {
-        col.value = store.state.sudoku.solution[col.row * 9 + col.col]
-      })
-    })
-    store.state.sudoku.solvedTime = new Date()
-    store.state.sudoku.shareUrl = shareUrl(store.state.sudoku)
-    store.state.sudoku.cheated = true
+    store.state.sudoku.rows.forEach((row) => {
+      row.cols.forEach((col) => {
+        col.value = store.state.sudoku.solution[col.row * 9 + col.col];
+      });
+    });
+    store.state.sudoku.solvedTime = new Date();
+    store.state.sudoku.shareUrl = shareUrl(store.state.sudoku);
+    store.state.sudoku.cheated = true;
   },
 
   /**
@@ -47,10 +47,10 @@ const store = {
    */
   progressOptions: {
     enable: () => {
-      store.state.showProgress = true
+      store.state.showProgress = true;
     },
     disable: () => {
-      store.state.showProgress = false
+      store.state.showProgress = false;
     },
   },
 
@@ -59,70 +59,71 @@ const store = {
    */
   resetSudoku() {
     if (!store.state.sudoku.solvedTime) {
-      store.state.previousSudoku = store.state.sudoku
+      store.state.previousSudoku = store.state.sudoku;
     }
-    const allCorrectFields = document.querySelectorAll('.field.correct')
-    allCorrectFields.forEach(field => {
-      if (!store.state.sudoku.solvedTime) field.classList.add("previousCorrect")
-      field.classList.remove("correct")
-    })
-    const allWrongFields = document.querySelectorAll('.field.wrong')
-    allWrongFields.forEach(field => {
-      if (!store.state.sudoku.solvedTime) field.classList.add("previousWrong")
-      field.classList.remove("wrong")
-    })
-    store.state.sudoku = generateSudoku()
+    const allCorrectFields = document.querySelectorAll(".field.correct");
+    allCorrectFields.forEach((field) => {
+      if (!store.state.sudoku.solvedTime) field.classList.add("previousCorrect");
+      field.classList.remove("correct");
+    });
+    const allWrongFields = document.querySelectorAll(".field.wrong");
+    allWrongFields.forEach((field) => {
+      if (!store.state.sudoku.solvedTime) field.classList.add("previousWrong");
+      field.classList.remove("wrong");
+    });
+    store.state.sudoku = generateSudoku();
   },
 
   /**
    * Restore your last board if you created a new one by mistake
    */
   restoreSudoku() {
-    store.state.sudoku = store.state.previousSudoku
-    store.state.previousSudoku = null
-    const allCorrectFields = document.querySelectorAll('.field.correct')
-    allCorrectFields.forEach(field => {
-      field.classList.remove("correct")
-    })
-    const allWrongFields = document.querySelectorAll('.field.wrong')
-    allWrongFields.forEach(field => {
-      field.classList.remove("wrong")
-    })
-    const previousCorrectFields = document.querySelectorAll('.previousCorrect')
-    previousCorrectFields.forEach(field => {
-      field.classList.add("correct")
-      field.classList.remove("previousCorrect")
-    })
-    const previousWrongFields = document.querySelectorAll('.previousWrong')
-    previousWrongFields.forEach(field => {
-      field.classList.add("wrong")
-      field.classList.remove("previousWrong")
-    })
-  }
-}
+    store.state.sudoku = store.state.previousSudoku;
+    store.state.previousSudoku = null;
+    const allCorrectFields = document.querySelectorAll(".field.correct");
+    allCorrectFields.forEach((field) => {
+      field.classList.remove("correct");
+    });
+    const allWrongFields = document.querySelectorAll(".field.wrong");
+    allWrongFields.forEach((field) => {
+      field.classList.remove("wrong");
+    });
+    const previousCorrectFields = document.querySelectorAll(".previousCorrect");
+    previousCorrectFields.forEach((field) => {
+      field.classList.add("correct");
+      field.classList.remove("previousCorrect");
+    });
+    const previousWrongFields = document.querySelectorAll(".previousWrong");
+    previousWrongFields.forEach((field) => {
+      field.classList.add("wrong");
+      field.classList.remove("previousWrong");
+    });
+  },
+};
 </script>
 
 <template>
   <component :is="'style'" v-if="store.state.showProgress">
-    .field.wrong:not([readonly]) {
-    background-color: rgb(255 0 0 / 0.3);
-    }
-
-    .field.correct:not([readonly]) {
-    background-color: rgba(0 255 0 / 0.3);
-    }
+    .field.wrong:not([readonly]) { background-color: rgb(255 0 0 / 0.3); }
+    .field.correct:not([readonly]) { background-color: rgba(0 255 0 / 0.3); }
   </component>
   <header class="header">
     <h1>Sudoku</h1>
   </header>
-  <SudokuBoard :sudoku="store.state.sudoku" :onChange="store.handleChange" :solver="store.solveSudoku"
-               :reset="store.resetSudoku" :progressOpts="store.progressOptions" :progress="store.state.showProgress"
-               :restore="store.restoreSudoku" :previous="store.state.previousSudoku"/>
-  <ReloadPrompt/>
+  <SudokuBoard
+    :sudoku="store.state.sudoku"
+    :onChange="store.handleChange"
+    :solver="store.solveSudoku"
+    :reset="store.resetSudoku"
+    :progressOpts="store.progressOptions"
+    :progress="store.state.showProgress"
+    :restore="store.restoreSudoku"
+    :previous="store.state.previousSudoku" />
+  <ReloadPrompt />
 </template>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Antique&display=swap");
 
 html {
   --eerie-black: hsla(0, 0%, 8%, 1);
@@ -141,14 +142,16 @@ html {
   --step-4: clamp(2.3325rem, 2.1301rem + 1.0122vw, 2.8513rem);
   --step-5: clamp(2.7994rem, 2.5567rem + 1.2134vw, 3.4213rem);
   --step-6: clamp(3.3594rem, 3.0682rem + 1.4561vw, 4.1056rem);
-  --titles: 'Shippori Antique', sans-serif;
+  --titles: "Shippori Antique", sans-serif;
 
   --canvas: var(--white);
   --ink: var(--eerie-black);
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -184,7 +187,9 @@ button {
   gap: 1rem;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--titles);
 }
 
@@ -199,7 +204,6 @@ h2 {
 .header {
   background-color: var(--blue);
   display: grid;
-  padding: 1em;
   place-items: center;
   text-align: center;
 }

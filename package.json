@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "dprint check",
+    "lint::fix": "dprint fmt"
   },
   "dependencies": {
     "canvas-confetti": "^1.4.0",
@@ -15,6 +17,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
+    "dprint": "^0.29.1",
     "sass": "^1.48.0",
     "vite": "^2.7.2"
   }

@@ -1,8 +1,8 @@
 <script setup>
-import SudokuField from './SudokuField.vue'
-import Timer from './Timer.vue'
-import Result from './Result.vue'
-import {reactive} from "vue"
+import SudokuField from "./SudokuField.vue";
+import Timer from "./Timer.vue";
+import Result from "./Result.vue";
+import { reactive } from "vue";
 
 const props = defineProps({
   sudoku: Object,
@@ -13,28 +13,32 @@ const props = defineProps({
   progressOpts: Object,
   restore: Function,
   previous: Object,
-})
+});
 
-const toggle = reactive({checked: false})
+const toggle = reactive({ checked: false });
 
 function handleToggle(e) {
-  console.log(e.target.value)
+  console.log(e.target.value);
   if (toggle.checked) {
-    props.progressOpts.enable()
+    props.progressOpts.enable();
   } else {
-    props.progressOpts.disable()
+    props.progressOpts.disable();
   }
 }
 </script>
 
 <template>
   <main class="main">
-    <Timer v-if="!props.sudoku.solvedTime" :start="props.sudoku.startTime"/>
-    <Result v-if="props.sudoku.solvedTime" :sudoku="props.sudoku"/>
+    <Timer v-if="!props.sudoku.solvedTime" :start="props.sudoku.startTime" />
+    <Result v-if="props.sudoku.solvedTime" :sudoku="props.sudoku" />
     <div class="wrapper">
-      <div class="board" :class="{solved: props.sudoku.solvedTime}">
+      <div class="board" :class="{ solved: props.sudoku.solvedTime }">
         <div class="row" v-for="row in props.sudoku.rows" :key="row.index">
-          <SudokuField v-for="field in row.cols" :key="field.col" :field="field" :onChange="props.onChange"/>
+          <SudokuField
+            v-for="field in row.cols"
+            :key="field.col"
+            :field="field"
+            :onChange="props.onChange" />
         </div>
       </div>
       <div class="actions">
@@ -42,15 +46,21 @@ function handleToggle(e) {
           <legend>Game Options</legend>
           <label class="switch" for="progress-toggle">
             <span class="switch__label">Color Clues 🔍</span>
-            <input type="checkbox" name="Toggle Cell Highlighting" id="progress-toggle" v-model="toggle.checked"
-                   @change="handleToggle">
+            <input
+              type="checkbox"
+              name="Toggle Cell Highlighting"
+              id="progress-toggle"
+              v-model="toggle.checked"
+              @change="handleToggle" />
             <span class="slider"></span>
           </label>
         </fieldset>
         <div class="buttons">
           <button class="solve" @click="props.solver">Solve it Magically!</button>
           <button class="reset" @click="props.reset">New Puzzle</button>
-          <button class="restore" @click="props.restore" v-if="props.previous">Restore Your Last Board</button>
+          <button class="restore" @click="props.restore" v-if="props.previous">
+            Restore Your Last Board
+          </button>
         </div>
       </div>
     </div>
@@ -58,19 +68,15 @@ function handleToggle(e) {
 </template>
 
 <style lang="scss" scoped>
-.main {
-  padding-block: 1rem;
-}
-
 .wrapper {
-  margin-inline: auto;
-  max-inline-size: 45rem;
   padding: 1rem;
 }
 
 .board {
   --thickness: 4px;
   border: var(--thickness) solid var(--ink);
+  margin-inline: auto;
+  max-inline-size: 40rem;
 }
 
 .row {
@@ -92,7 +98,7 @@ function handleToggle(e) {
   max-inline-size: 30rem;
   padding: {
     block: 1rem;
-    inline: .75rem;
+    inline: 0.5rem;
   }
 
   legend {
@@ -100,8 +106,8 @@ function handleToggle(e) {
     color: var(--eerie-black);
     margin-inline-start: 1rem;
     padding: {
-      block: .5rem;
-      inline: .75rem;
+      block: 0.5rem;
+      inline: 0.75rem;
     }
   }
 }
@@ -136,7 +142,7 @@ function handleToggle(e) {
 
   .slider {
     --bg: var(--amber-sae-ece);
-    --timing: .3s;
+    --timing: 0.3s;
     background-color: var(--bg);
     block-size: inherit;
     border-radius: 34px;
@@ -162,14 +168,13 @@ function handleToggle(e) {
   flex-wrap: wrap;
   gap: 1em;
   justify-content: center;
-  padding: .75rem;
 
   button {
     --lightness: 8%;
     --hs: 0deg, 0%;
     background-color: hsl(var(--hs), var(--lightness));
     border: none;
-    border-radius: .5em;
+    border-radius: 0.5em;
     color: var(--canvas);
     cursor: pointer;
     font: {
@@ -177,7 +182,7 @@ function handleToggle(e) {
       size: var(--step--2);
     }
     padding: {
-      block: .75em;
+      block: 0.75em;
       inline: 1em;
     }
 

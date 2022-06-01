@@ -1,27 +1,27 @@
 <script setup>
-import {onBeforeUnmount, onMounted, reactive} from "vue"
+import { onBeforeUnmount, onMounted, reactive } from "vue";
 
 const props = defineProps({
-  start: Date
-})
+  start: Date,
+});
 
 const state = reactive({
   elapsed: 0,
-  interval: setInterval(getTime, 1000)
-})
+  interval: setInterval(getTime, 1000),
+});
 
 function getTime() {
-  state.elapsed = Math.floor((new Date().getTime() - props.start.getTime()) / 1000)
+  state.elapsed = Math.floor((new Date().getTime() - props.start.getTime()) / 1000);
 }
 
 onMounted(() => {
-  state.interval
-})
+  state.interval;
+});
 
 onBeforeUnmount(() => {
-  clearInterval(state.interval)
-  delete state.interval
-})
+  clearInterval(state.interval);
+  delete state.interval;
+});
 </script>
 
 <template>
