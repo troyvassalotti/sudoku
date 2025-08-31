@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "deploy": "netlify deploy --prod",
     "preview": "vite preview",
     "lint": "dprint check",
     "lint::fix": "dprint fmt"
